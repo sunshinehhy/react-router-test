@@ -1,17 +1,45 @@
-React Router Tutorial
-=====================
+React Router test
 
-Quick lessons for getting up-to-speed with React Router.
+https://github.com/reactjs/react-router-tutorial/tree/master/lessonss
 
-See [Lesson 1 - Setting Up](/lessons/01-setting-up/) to get started.
+我们应用程序中的url现在是建立在一个hack上的:散列。这是默认值，因为它总是有效，但有更好的方法。
 
-Each lesson is a fully runnable app with all code from the previous lesson, so you can `cd lessons/<lesson-folder>`, npm install,
-and then run the appropriate NPM scripts for each lesson from within the lesson folder.
+现代浏览器允许JavaScript在不发出http请求的情况下操作URL，因此我们不需要依赖URL的散列(#)部分来进行路由，但是有一个捕获(稍后我们将讨论它)。
 
-Missing stuff that will come eventually, hopefully ... maybe.
+无论什么URL进来,你的服务器需要传送你的app。在浏览器中，因为你的app正在操作URL。我们当前的服务器不知道如何处理URL。所以需要配置服务器。
 
-1. an app that isn't completely pointless
-- egghead.io videos
-- code splitting
-- location state
-- data integration
+11 
+这些都与React路由器无关，但既然我们讨论的是web服务器，我们不妨向现实世界走近一步。在下一节中，我们还将需要它用于服务器呈现。
+
+Webpack dev服务器不是一个生产服务器。让我们创建一个生产服务器和一个环境敏感的脚本，以根据环境启动正确的服务器。
+
+12
+虽然大多数导航都是通过链接进行的，但是您可以通过编程的方式在一个应用程序中导航，以响应表单提交、按钮点击等等。
+
+让我们在以编程方式导航的Repos中创建一个表单。
+
+但这有一个潜在的问题。如果你将不同的历史传递给路由器，它就不会起作用。除了browserHistory之外，使用其他任何东西都不是很常见，所以这是可以接受的做法。如果你担心它，你可以制作一个模块来导出你想要在整个应用程序中使用的历史，或者…
+
+您还可以使用路由器提供的“上下文”路由器。首先，在组件中请求上下文，然后您可以使用它:
+
+这样，你就可以确保将历史传递给路由器。它也使测试变得更容易，因为您可以更容易地存根上下文而不是单例。
+
+13
+
+这不是火箭科学，但也不是微不足道的。首先，我要向你抛出一堆webpack恶作剧，然后我们会讨论路由器。
+
+由于node不(也不应该)理解JSX，所以我们需要以某种方式编译代码。使用babel/register之类的东西不适合生产使用，因此我们将使用webpack构建一个服务器包，就像我们用它来构建一个客户包一样。
+
+希望这是有意义的，我们不打算讨论所有这些内容，现在我们可以运行我们的服务器了。js文件通过webpack，然后运行它。
+
+现在，在运行我们的应用程序之前，我们需要制作一些脚本来构建服务器包。json脚本配置如下:
+
+现在，当我们运行NODE_ENV=生产npm时，客户端和服务器包都是由Webpack创建的。
+
+好的，我们来谈谈路由器。我们将需要将我们的路由划分为一个模块，这样客户端和服务器条目都可以require它。在modules/routes上做一个文件，将你的路线和组件移动到它里面。
+
+如果我们试图在服务器上呈现一个<路由器/>，就像我们在客户端所做的那样，我们会得到一个空的屏幕，因为服务器呈现是同步的，而路由匹配是异步的。
+
+而且，大多数应用程序都希望使用路由器来帮助他们加载数据，所以是不是异步路由，你会想知道在你实际渲染之前会呈现什么屏幕，这样你就可以在渲染之前使用这些信息来加载异步数据。我们在这个应用程序中没有任何数据加载，但是你会看到它会发生在哪里。
+
+就是这样。现在，如果您运行NODE_ENV=生产npm启动和访问应用程序，您可以查看源代码，并看到服务器正在将我们的应用程序发送到浏览器。当您单击时，您会注意到客户端应用程序已经接管，并没有向服务器请求UI。很酷对吗? !
