@@ -1,2 +1,2 @@
-var react = require('react');
-console.log(react.version);
+// var react = require('react');
+// console.log(react.version);

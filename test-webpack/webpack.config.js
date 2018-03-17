@@ -20,7 +20,8 @@ module.exports = {
         'webpack-dev-server/client?http://localhost:3000',
         'webpack/hot/only-dev-server',
         'react-hot-loader/patch',
-        path.join(__dirname, 'app/index.js')
+        // path.join(__dirname, 'app/index.js')
+        path.join(__dirname, 'app/redux-thunk.js')
     ],
     output: {
         path: path.join(__dirname, '/dist/'),
